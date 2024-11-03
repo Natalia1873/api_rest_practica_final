@@ -1,7 +1,7 @@
 package com.keepcoding.api_rest_practica_final.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -22,21 +22,22 @@ public class Compra implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	
-	private Date fecha;
+	@Column(nullable = false)
+    private LocalDate fecha;
 	
-	@Column(nullable = false,length = 100)
-	private int cantidad;
+	@Column(nullable = false)
+	private Integer cantidad;
 	
-	@Column(nullable = false,length = 100)
-	private long total;
+	@Column(nullable = false)
+	private Double total;
 	
-	@Column(nullable = false,length = 100)
-	private int iva;
+	@Column(nullable = false)
+	private Double iva;
 	
-	@Column(nullable = false,length = 100)
-	private int total_iva;
+	@Column(nullable = false)
+	private Double total_iva;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id")
@@ -49,64 +50,77 @@ public class Compra implements Serializable {
     private Articulo articulo;
 		
 	
-	public long getId() {
+	
+	public Long getId() {
 		return id;
 	}
 
 
-	public void setId(long id) {
+
+	public void setId(Long id) {
 		this.id = id;
 	}
 
 
-	public Date getFecha() {
+
+	public LocalDate getFecha() {
 		return fecha;
 	}
 
 
-	public void setFecha(Date fecha) {
+
+	public void setFecha(LocalDate fecha) {
 		this.fecha = fecha;
 	}
 
 
-	public int getCantidad() {
+
+	public Integer getCantidad() {
 		return cantidad;
 	}
 
 
-	public void setCantidad(int cantidad) {
+
+	public void setCantidad(Integer cantidad) {
 		this.cantidad = cantidad;
 	}
 
 
-	public long getTotal() {
+
+	public Double getTotal() {
 		return total;
 	}
 
 
-	public void setTotal(long total) {
+
+	public void setTotal(Double total) {
 		this.total = total;
 	}
 
 
-	public int getIva() {
+
+	public Double getIva() {
 		return iva;
 	}
 
 
-	public void setIva(int iva) {
+
+	public void setIva(Double iva) {
 		this.iva = iva;
 	}
 
 
-	public int getTotal_iva() {
+
+	public Double getTotal_iva() {
 		return total_iva;
 	}
 
 
-	public void setTotal_iva(int total_iva) {
+
+	public void setTotal_iva(Double total_iva) {
 		this.total_iva = total_iva;
 	}
+
 
 
 	public Cliente getCliente() {
@@ -114,9 +128,11 @@ public class Compra implements Serializable {
 	}
 
 
+
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+
 
 
 	public Articulo getArticulo() {
@@ -124,9 +140,11 @@ public class Compra implements Serializable {
 	}
 
 
+
 	public void setArticulo(Articulo articulo) {
 		this.articulo = articulo;
 	}
+
 
 
 	/**

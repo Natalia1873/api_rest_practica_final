@@ -1,62 +1,67 @@
 package com.keepcoding.api_rest_practica_final.entity;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.time.LocalDate;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import java.util.List;
 
 @Entity
-@Table(name="cliente")
-public class Cliente implements Serializable{
-	
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	
-	@Column(nullable = false,length = 100)
-	private String nombre;
-	
-	@Column(nullable = false,length = 100)
-	private String apellido;
-	
-	@Column(nullable = false,length = 100)
-	private String empresa;
-	
-	@Column(nullable = false,length = 100)
-	private String puesto;
-	
-	@Column(nullable = false,length = 100)
-	private String direccion;
-	
-	@Column(nullable = false,length = 100)
-	private int codigo_postal;
-	
-	@Column(nullable = false,length = 100)
-	private String provincia;
-	
-	@Column(nullable = false,length = 100)
-	private String telefono;
-	
-	private LocalDate fecha_nacimiento;
-	
-	
-	
-	public long getId() {
+@Table(name = "cliente")
+public class Cliente implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+   
+    @Column(nullable = false, length = 100)
+    private String nombre;
+
+   
+    @Column(nullable = false, length = 100)
+    private String apellido;
+
+   
+    @Column(nullable = false, length = 100)
+    private String empresa;
+
+    
+    @Column(nullable = false, length = 100)
+    private String puesto;
+
+    
+    @Column(nullable = false, length = 100)
+    private String direccion;
+
+   
+    @Column(nullable = false)
+    private Integer codigoPostal;
+
+   
+    @Column(nullable = false, length = 100)
+    private String provincia;
+
+    
+    @Column(nullable = false, length = 15)
+    private String telefono;
+
+    
+    @Column(name = "fecha_nacimiento")
+    private LocalDate fechaNacimiento;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Compra> compras;
+
+ 
+    public Long getId() {
 		return id;
 	}
 
 
-
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
-
 
 
 	public String getNombre() {
@@ -64,11 +69,9 @@ public class Cliente implements Serializable{
 	}
 
 
-
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
 
 
 	public String getApellido() {
@@ -76,11 +79,9 @@ public class Cliente implements Serializable{
 	}
 
 
-
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
-
 
 
 	public String getEmpresa() {
@@ -88,11 +89,9 @@ public class Cliente implements Serializable{
 	}
 
 
-
 	public void setEmpresa(String empresa) {
 		this.empresa = empresa;
 	}
-
 
 
 	public String getPuesto() {
@@ -100,11 +99,9 @@ public class Cliente implements Serializable{
 	}
 
 
-
 	public void setPuesto(String puesto) {
 		this.puesto = puesto;
 	}
-
 
 
 	public String getDireccion() {
@@ -112,23 +109,19 @@ public class Cliente implements Serializable{
 	}
 
 
-
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
 	}
 
 
-
-	public int getCodigo_postal() {
-		return codigo_postal;
+	public Integer getCodigoPostal() {
+		return codigoPostal;
 	}
 
 
-
-	public void setCodigo_postal(int codigo_postal) {
-		this.codigo_postal = codigo_postal;
+	public void setCodigoPostal(Integer codigoPostal) {
+		this.codigoPostal = codigoPostal;
 	}
-
 
 
 	public String getProvincia() {
@@ -136,11 +129,9 @@ public class Cliente implements Serializable{
 	}
 
 
-
 	public void setProvincia(String provincia) {
 		this.provincia = provincia;
 	}
-
 
 
 	public String getTelefono() {
@@ -148,30 +139,34 @@ public class Cliente implements Serializable{
 	}
 
 
-
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
 
 
-
-	public LocalDate getFecha_nacimiento() {
-		return fecha_nacimiento;
+	public LocalDate getFechaNacimiento() {
+		return fechaNacimiento;
 	}
 
 
-
-	public void setFecha_nacimiento(LocalDate fecha_nacimiento) {
-		this.fecha_nacimiento = fecha_nacimiento;
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	}
 
 
+	public List<Compra> getCompras() {
+		return compras;
+	}
 
-	/**
-	 * 
-	 */
+
+	public void setCompras(List<Compra> compras) {
+		this.compras = compras;
+	}
+
+
 	private static final long serialVersionUID = 1L;
+    
+    
+ 
+    }
 
-	
-
-}
