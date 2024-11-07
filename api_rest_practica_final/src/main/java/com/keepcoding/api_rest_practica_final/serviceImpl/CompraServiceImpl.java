@@ -20,7 +20,7 @@ public class CompraServiceImpl implements CompraService{
 	
 	@Override
 	@Transactional(readOnly = true)
-	public List<Compra> allCompra() {
+	public List<Compra> allCompras() {
 		return (List<Compra>) compraRepository.findAll();
 	}
 
@@ -38,7 +38,7 @@ public class CompraServiceImpl implements CompraService{
 
 	@Override
 	@Transactional
-	public void customerDelete(Long id) {
+	public void compraDelete(Long id) {
 		compraRepository.deleteById(id);
 		
 	}
