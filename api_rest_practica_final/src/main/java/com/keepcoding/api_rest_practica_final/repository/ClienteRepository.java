@@ -8,3 +8,4 @@ import com.keepcoding.api_rest_practica_final.entity.Cliente;
 public interface ClienteRepository extends JpaRepository<Cliente, Long>{
 
 }
+

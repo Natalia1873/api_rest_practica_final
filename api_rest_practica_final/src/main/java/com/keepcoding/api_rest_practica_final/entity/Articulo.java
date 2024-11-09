@@ -1,12 +1,11 @@
 package com.keepcoding.api_rest_practica_final.entity;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,43 +14,38 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "articulo")
-public class Articulo implements Serializable {
-
+public class Articulo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @Column(nullable = false, length = 100)
     private String nombre;
-
+    
     @Column(length = 500)
     private String descripcion;
-
+    
     @Column(name = "unidad_precio", nullable = false)
     private Double unidadPrecio;
-
+    
     @Column(name = "unidad_stock", nullable = false)
     private Integer unidadStock;
-
+    
     @Column(nullable = false, length = 50)
     private String tipo;
-
+    
     @Column(nullable = false, length = 100)
     private String proveedor;
-
+    
     @Column(name = "fecha")
     private LocalDate fecha;
-
-    @JsonIgnoreProperties({"articulo", "hibernateLazyInitializer", "handler"})
-    @OneToMany(mappedBy = "articulo", cascade = CascadeType.ALL)
+    
+    @OneToMany(mappedBy = "articulo", fetch = FetchType.LAZY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Compra> compras;
-
-    // Constructor por defecto
-    public Articulo() {
-    }
-
-   
+	    
+	    
     // Getters y Setters
 	public Long getId() {
 		return id;
@@ -159,11 +153,5 @@ public class Articulo implements Serializable {
 		this.compras = compras;
 	}
 
-
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
     
 }

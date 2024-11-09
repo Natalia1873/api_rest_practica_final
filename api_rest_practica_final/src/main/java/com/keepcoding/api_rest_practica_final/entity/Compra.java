@@ -1,8 +1,7 @@
 package com.keepcoding.api_rest_practica_final.entity;
 
-import java.io.Serializable;
 import java.time.LocalDate;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,43 +13,37 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="compra")
-public class Compra implements Serializable {
-	
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@Column(nullable = false)
+@Table(name = "compra")
+public class Compra {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false)
     private LocalDate fecha;
-	
-	@Column(nullable = false)
-	private Integer cantidad;
-	
-	@Column(nullable = false)
-	private Double total;
-	
-	@Column(nullable = false)
-	private Double iva;
-	
-	@Column(nullable = false)
-	private Double total_iva;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
+    
+    @Column(nullable = false)
+    private Integer cantidad;
+    
+    @Column(nullable = false)
+    private Double total;
+    
+    @Column(nullable = false)
+    private Double iva;
+    
+    @Column(nullable = false)
+    private Double total_iva;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id")
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Cliente cliente;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
+    
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "articulo_id")
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Articulo articulo;
-		
-	// Constructor por defecto
-	public Compra() {}
-		
-		
+    
 	// Getters y Setters
 	
 	public Long getId() {
@@ -147,12 +140,6 @@ public class Compra implements Serializable {
 		this.articulo = articulo;
 	}
 
-
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 
 }
