@@ -1,7 +1,6 @@
 package com.keepcoding.api_rest_practica_final.service;
 
 import java.util.List;
-
 import com.keepcoding.api_rest_practica_final.entity.Articulo;
 
 public interface ArticuloService {

@@ -2,9 +2,7 @@ package com.keepcoding.api_rest_practica_final.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -49,7 +47,11 @@ public class Compra implements Serializable {
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Articulo articulo;
 		
-	
+	// Constructor por defecto
+	public Compra() {}
+		
+		
+	// Getters y Setters
 	
 	public Long getId() {
 		return id;

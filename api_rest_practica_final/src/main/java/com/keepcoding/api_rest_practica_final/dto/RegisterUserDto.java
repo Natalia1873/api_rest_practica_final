@@ -6,8 +6,11 @@ public class RegisterUserDto {
 	private String password;
 	private String fullName;
 	
+	// Default constructor
+    public RegisterUserDto() {
+    }
 
-
+    // Getters and Setters
 	public String getEmail() {
 		return email;
 	}
@@ -29,7 +32,5 @@ public class RegisterUserDto {
 		this.fullName = fullName;
 		return this;
 	}
-	
-	
 
 }

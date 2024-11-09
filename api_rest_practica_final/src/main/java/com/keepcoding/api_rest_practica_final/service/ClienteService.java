@@ -1,10 +1,8 @@
 package com.keepcoding.api_rest_practica_final.service;
 
 import java.util.List;
-
-import com.keepcoding.api_rest_practica_final.entity.Articulo;
 import com.keepcoding.api_rest_practica_final.entity.Cliente;
-import com.keepcoding.api_rest_practica_final.entity.Compra;
+
 
 public interface ClienteService {
 	
@@ -16,9 +14,5 @@ public interface ClienteService {
 	
 	public void clienteDelete(Long id);
 	
-	
-	
-	
-
 }
 
