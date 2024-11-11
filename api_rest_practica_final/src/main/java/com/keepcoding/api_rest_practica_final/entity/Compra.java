@@ -1,6 +1,8 @@
 package com.keepcoding.api_rest_practica_final.entity;
 
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,14 +38,20 @@ public class Compra {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "compras"})
     private Cliente cliente;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "articulo_id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "compras"})
     private Articulo articulo;
     
+    
+    @Column(name = "cliente_id", insertable = false, updatable = false)
+    private Long clienteId;
+    
+    @Column(name = "articulo_id", insertable = false, updatable = false)
+    private Long articuloId;
 	// Getters y Setters
 	
 	public Long getId() {

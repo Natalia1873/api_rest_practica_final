@@ -1,5 +1,6 @@
 package com.keepcoding.api_rest_practica_final.controller;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.keepcoding.api_rest_practica_final.entity.Articulo;
+import com.keepcoding.api_rest_practica_final.entity.Cliente;
 import com.keepcoding.api_rest_practica_final.entity.Compra;
+import com.keepcoding.api_rest_practica_final.service.ArticuloService;
+import com.keepcoding.api_rest_practica_final.service.ClienteService;
 import com.keepcoding.api_rest_practica_final.service.CompraService;
 
 
@@ -25,6 +30,12 @@ public class CompraController {
 	
 	@Autowired
     private CompraService service;
+	
+	@Autowired
+    private ClienteService clienteService;
+	
+	@Autowired
+    private ArticuloService articuloService;
 
     @GetMapping
     public ResponseEntity<?>  index() {
@@ -56,58 +67,106 @@ public class CompraController {
 
     
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody Compra compra) {
-		Compra compraNew = null;
-		Map<String,Object> response = new HashMap<>();
-		
-		try {
-			compraNew = service.compraSave(compra);
-		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al realizar insert en base de datos");
-			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-		}
-		
-		response.put("mensaje","El Customer ha sido creado con exito!");
-		response.put("compra", compraNew);
-		return ResponseEntity.status(HttpStatus.CREATED).body(response);
-	}
-	
+    public ResponseEntity<?> save(@RequestBody Map<String, Object> request) {
+        try {
+            Compra compra = new Compra();
+            compra.setFecha(LocalDate.parse((String) request.get("fecha")));
+            compra.setCantidad((Integer) request.get("cantidad"));
+            compra.setTotal((Double) request.get("total"));
+            compra.setIva((Double) request.get("iva"));
+            compra.setTotal_iva((Double) request.get("total_iva"));
+
+            
+            Long clienteId = Long.valueOf(request.get("cliente_id").toString());
+            Cliente cliente = clienteService.clienteById(clienteId);
+            if(cliente == null) {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("mensaje", "Cliente no encontrado");
+                return ResponseEntity.badRequest().body(errorResponse);
+            }
+            compra.setCliente(cliente);
+
+           
+            Long articuloId = Long.valueOf(request.get("articulo_id").toString());
+            Articulo articulo = articuloService.articuloById(articuloId);
+            if(articulo == null) {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("mensaje", "Artículo no encontrado");
+                return ResponseEntity.badRequest().body(errorResponse);
+            }
+            compra.setArticulo(articulo);
+
+            Compra compraNueva = service.compraSave(compra);
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("mensaje", "La compra ha sido creada con éxito!");
+            response.put("compra", compraNueva);
+            
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("mensaje", "Error al crear la compra");
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+
     @PutMapping("/edit/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Compra compra) {
-		Compra compraUpdate = null;
-		Map<String,Object> response = new HashMap<>();
-		Compra editCompra = service.compraById(id);
-		
-		if(editCompra==null) {
-			response.put("mensaje","No existe el registro con id:"+id);
-			return ResponseEntity.status(HttpStatus.OK).body(response);
-		}
-		
-		try {
-			
-			editCompra.setArticulo(compra.getArticulo());
-			editCompra.setCantidad(compra.getCantidad());
-			editCompra.setCliente(compra.getCliente());
-			editCompra.setFecha(compra.getFecha());
-			editCompra.setIva(compra.getIva());
-			editCompra.setTotal(compra.getTotal());
-			editCompra.setTotal_iva(compra.getTotal_iva());
-			
-			compraUpdate= service.compraSave(editCompra);
-			
-		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al realizar update en base de datos");
-			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-		}
-		
-		response.put("mensaje","La Compra ha sido actualizado con exito");
-		response.put("compra", compraUpdate);
-		
-		return ResponseEntity.status(HttpStatus.OK).body(response);
-				
-	}
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> request) {
+       try {
+           
+           Compra compraActual = service.compraById(id);
+           if(compraActual == null) {
+               Map<String, String> response = new HashMap<>();
+               response.put("mensaje", "No existe la compra con id: " + id);
+               return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+           }
+
+           
+           compraActual.setFecha(LocalDate.parse((String) request.get("fecha")));
+           compraActual.setCantidad((Integer) request.get("cantidad"));
+           compraActual.setTotal((Double) request.get("total"));
+           compraActual.setIva((Double) request.get("iva"));
+           compraActual.setTotal_iva((Double) request.get("total_iva"));
+
+           
+           Long clienteId = Long.valueOf(request.get("cliente_id").toString());
+           Cliente cliente = clienteService.clienteById(clienteId);
+           if(cliente == null) {
+               Map<String, String> response = new HashMap<>();
+               response.put("mensaje", "Cliente no encontrado");
+               return ResponseEntity.badRequest().body(response);
+           }
+           compraActual.setCliente(cliente);
+
+           
+           Long articuloId = Long.valueOf(request.get("articulo_id").toString());
+           Articulo articulo = articuloService.articuloById(articuloId);
+           if(articulo == null) {
+               Map<String, String> response = new HashMap<>();
+               response.put("mensaje", "Artículo no encontrado");
+               return ResponseEntity.badRequest().body(response);
+           }
+           compraActual.setArticulo(articulo);
+
+           
+           Compra compraUpdated = service.compraSave(compraActual);
+           
+           Map<String, Object> response = new HashMap<>();
+           response.put("mensaje", "La compra ha sido actualizada con éxito");
+           response.put("compra", compraUpdated);
+           
+           return ResponseEntity.ok(response);
+
+       } catch (Exception e) {
+           Map<String, Object> response = new HashMap<>();
+           response.put("mensaje", "Error al actualizar la compra");
+           response.put("error", e.getMessage());
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+       }
+    }
 	
     @DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id){
